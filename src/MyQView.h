@@ -1,7 +1,7 @@
 #ifndef MYQVIEW_H
 #define MYQVIEW_H
 
-#include <QGraphicsView>
+#include <QtWidgets/QGraphicsView>
 #include <QMouseEvent>
 #include <QDebug>
 

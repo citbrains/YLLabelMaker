@@ -1,7 +1,7 @@
 #ifndef LABELMAKER_H
 #define LABELMAKER_H
 
-#include <QWidget>
+#include <QtWidgets/QtWidgets>
 #include <fstream>
 #include <QGraphicsObject>
 #include <QGraphicsItem>

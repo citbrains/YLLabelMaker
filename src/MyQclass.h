@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <QObject>
-#include <QWidget>
+#include <QtWidgets/QtWidgets>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QFile>
