@@ -3,8 +3,8 @@
 
 #include <QtWidgets/QtWidgets>
 #include <fstream>
-#include <QGraphicsObject>
-#include <QGraphicsItem>
+#include <QtWidgets/QGraphicsObject>
+#include <QtWidgets/QGraphicsItem>
 #include <QSettings>
 #include <MyQclass.h>
 #include <ui_dirdialog.h>
@@ -20,7 +20,7 @@ class LabelMaker : public QWidget
     Q_OBJECT
 
 public:
-    explicit LabelMaker(QWidget *parent = 0);
+    explicit LabelMaker(QWidget *parent = nullptr);
     ~LabelMaker();
     struct Cursur
     {
@@ -69,11 +69,13 @@ private:
     QFileInfoList img_list;
     MyQclass myq;
     QGraphicsScene scene;
-    cv::Mat currentimg;
+    //cv::Mat currentimg;
+    QImage currentimg;
     QSettings key;
     void connectSignals();
     int updateView();
-    int setImage(cv::Mat src);
+    //int setImage(cv::Mat src);
+    int setImage(const QImage &img);
     int drawCursur();
     int drawRect();
     int drawBbox();

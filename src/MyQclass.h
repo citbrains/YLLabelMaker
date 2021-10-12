@@ -11,8 +11,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <opencv2/opencv.hpp>
-#include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
+#include <QtWidgets/QGraphicsScene>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QTime>
 
 enum COLORS

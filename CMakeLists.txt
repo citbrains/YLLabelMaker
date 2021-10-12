@@ -13,7 +13,6 @@ else()
 endif(OpenCV_VERSION VERSION_LESS)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(QtGui)
 set(QT_USE_QTMAIN true)
 set(QT_USE_QTGUI true)
 set(QT_USE_QTNETWORK true)
@@ -33,6 +32,6 @@ add_executable(LabelMaker
 
 target_link_libraries(LabelMaker
 	Qt5::Widgets
-  ${OpenCV_LIBS}
+    ${OpenCV_LIBS}
 	${QT_LIBRARIES}
 	)
