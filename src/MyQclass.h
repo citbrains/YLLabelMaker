@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <QObject>
-#include <QWidget>
+#include <QtWidgets/QtWidgets>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QFile>
@@ -11,8 +11,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <opencv2/opencv.hpp>
-#include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
+#include <QtWidgets/QGraphicsScene>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QTime>
 
 enum COLORS
