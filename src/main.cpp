@@ -3,9 +3,10 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    LabelMaker w;
-    w.showMaximized();
+    QApplication app(argc, argv);
+    LabelMaker *labelmaker = new LabelMaker;
+    
+    labelmaker->showMaximized();
 
-    return a.exec();
+    return app.exec();
 }
