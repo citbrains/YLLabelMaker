@@ -42,6 +42,9 @@ public:
     std::vector<Bbox> bboxes;
     Bbox latestBox;
 
+	std::pair<double, double> checkInsidebox(const Bbox&, const Bbox&);
+	void removeAllBoxes();
+
 private slots:
     void onMouseMovedGraphicsView(int x,int y,Qt::MouseButton b);
     void onMousePressedGraphicsView(int x,int y,Qt::MouseButton b);
