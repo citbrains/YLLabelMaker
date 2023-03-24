@@ -82,21 +82,61 @@ void LabelMaker::onMousePressedGraphicsView(int mx, int my, Qt::MouseButton b)
 	{
 		if(bboxes.size() > 0)
 		{
-            auto itr = bboxes.begin();
-            while(itr != bboxes.end())
-            {
-                Bbox *b = &(*itr);
-                if( isPixelInBbox(mx,my,b) == true )
-                {
-                    itr = bboxes.erase(itr);
-                    break;
-                }
-                else
-                {
-                    itr++;
-                }
-            }
-			updateView();
+			int mim_box_index=-1;
+			size_t box_num=bboxes.size();
+			std::vector<bool> box_in_fg(box_num, false);
+			std::vector<int> box_in_index;
+			for(int i=0;i<box_num;i++)//カーソルがボックスの中にあるかの確認
+			{
+				if(isPixelInBbox(mx, my, &bboxes.at(i)))
+				{
+					box_in_index.push_back(i);//index取得
+					//box_in_index.at(i) = i;
+					box_in_fg.at(i) = true;
+				}
+			}
+			int index_size = box_in_index.size();//カーソルの中にボックスが複数あるかどうか
+			bool box_inside_flag = false;
+			std::map<double, int> box_size;
+			//カーソル内にボックスが複数あり内包している場合
+			if(index_size > 1){
+				for(int i=0;i<index_size;i++)
+				{
+					for(int j=i+1;j<index_size;j++)
+					{
+						if(i != j){
+							auto [area_box1, area_box2] = checkInsidebox(bboxes.at(box_in_index.at(i)), bboxes.at(box_in_index.at(j)));
+							if(area_box1 > -1){
+								box_size.insert(std::make_pair(area_box1, box_in_index.at(i)));
+								box_size.insert(std::make_pair(area_box2, box_in_index.at(j)));
+								box_inside_flag = true;
+							}
+
+						}
+					}
+				}
+			}
+			if(box_inside_flag){
+				auto tmp_itr = box_size.begin();
+				bboxes.erase(bboxes.begin()+tmp_itr->second);
+				updateView();
+			}else{
+				auto itr = bboxes.begin();
+				while(itr != bboxes.end())
+				{
+					Bbox *b = &(*itr);
+					if( isPixelInBbox(mx,my,b) == true )
+					{
+						itr = bboxes.erase(itr);
+						break;
+					}
+					else
+					{
+						itr++;
+					}
+				}
+				updateView();
+			}
 		}
 	}
 }
@@ -651,6 +691,10 @@ bool LabelMaker::eventFilter(QObject *obj, QEvent *eve)
 		{
 			onPushBack();
 		}
+		if(key->text()=="c")
+		{
+			removeAllBoxes();
+		}
 		return true;
 	}
     return false;
@@ -676,4 +720,41 @@ bool LabelMaker::isPixelInBbox(int x,int y,Bbox *box)
         ret = false;
     }
     return ret;
+}
+
+std::pair<double, double> LabelMaker::checkInsidebox(const Bbox &box1, const Bbox &box2)
+{
+    int width  = scene_img_w;
+    int height = scene_img_h;
+    int left1  = (box1.x - box1.w/2) * width + viewoffset;
+    int top1   = (box1.y - box1.h/2) * height + viewoffset;
+    int right1 = (box1.x + box1.w/2) * width + viewoffset;
+    int bottom1= (box1.y + box1.h/2) * height + viewoffset;
+
+    int left2  = (box2.x - box2.w/2) * width + viewoffset;
+    int top2   = (box2.y - box2.h/2) * height + viewoffset;
+    int right2 = (box2.x + box2.w/2) * width + viewoffset;
+    int bottom2= (box2.y + box2.h/2) * height + viewoffset;
+
+	//box1が大きくbox2が内包されている場合
+	std::pair<double, double> ret;
+	double area_b1 = box1.w * box1.h;
+	double area_b2 = box2.w * box2.h;
+	if(left1 < left2 && right1 > right2 && top1 < top2 && bottom1 > bottom2) 
+	{
+		ret = {area_b1, area_b2};//
+	}else if (left2 < left1 && right2 > right1 && top2 < top1 && bottom2 > bottom1){ //box2が大きく内包している場合
+		ret = {area_b1, area_b2};//
+	}else{
+		ret = {-10, -10};
+	}
+
+	return ret;
+}
+void LabelMaker::removeAllBoxes()
+{
+	bboxes.clear();
+    updateView();
+
+    return ;
 }
